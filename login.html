@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Green Habit Tracker PRO</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #0a3d2e, #0d1430);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .wrapper {
+        width: 90%;
+        max-width: 1100px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .header-section {
+        width: 40%;
+    }
+
+    .header-section h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .header-section p {
+        font-size: 15px;
+        opacity: 0.8;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+        padding: 25px;
+        border-radius: 12px;
+        width: 45%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    input::placeholder {
+        color: #d3d3d3;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #3bd16f;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background: #2bbd5d;
+    }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="header-section">
+        <h1>Green Habit Tracker</h1>
+        <p>PRO (single‑file)<br>Build lasting green habits — local only</p>
+    </div>
+
+    <div class="card">
+        <h2>Sign Up</h2>
+        <input type="text" placeholder="username" />
+        <input type="password" placeholder="password" />
+        <button>Create account</button>
+    </div>
+
+    <div class="card">
+        <h2>Login</h2>
+        <input type="text" placeholder="username" />
+        <input type="password" placeholder="password" />
+        <button>Login</button>
+    </div>
+</div>
+
+</body>
+</html>

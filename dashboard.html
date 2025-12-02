@@ -1,0 +1,887 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Green Habit Tracker PRO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #00b894, #00cec9, #0984e3, #6c5ce7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .username {
+            color: white;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: rgba(255, 107, 107, 0.8);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 1);
+            transform: translateY(-2px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quote-text {
+            color: white;
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .quote-author {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: white;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .card h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        /* Streak Section */
+        .streak-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .streak-number {
+            font-size: 4rem;
+            color: #ffeaa7;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .streak-label {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            height: 30px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Habits List */
+        .habits-list {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .habit-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .habit-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .habit-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .habit-label {
+            color: white;
+            font-size: 1.1rem;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .habit-item.completed {
+            background: rgba(85, 239, 196, 0.3);
+        }
+
+        /* Button */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Badge Section */
+        .badge-display {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .badge-icon {
+            font-size: 6rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .badge-icon.unlock {
+            animation: badgeUnlock 0.8s ease;
+        }
+
+        @keyframes badgeUnlock {
+            0% { transform: scale(0) rotate(0deg); opacity: 0; }
+            50% { transform: scale(1.3) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); opacity: 1; }
+        }
+
+        .badge-glow {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+            border-radius: 50%;
+            padding: 20px;
+            display: inline-block;
+        }
+
+        .badge-name {
+            color: #ffeaa7;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .badge-description {
+            color: white;
+            font-size: 1rem;
+        }
+
+        /* Leaderboard */
+        .leaderboard-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard-item.top1 {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .leaderboard-item.top2 {
+            background: linear-gradient(135deg, #C0C0C0 0%, #999999 100%);
+        }
+
+        .leaderboard-item.top3 {
+            background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+        }
+
+        .leaderboard-rank {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin-right: 15px;
+        }
+
+        .leaderboard-username {
+            flex: 1;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .leaderboard-streak {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Analytics Chart */
+        .chart-container {
+            margin-top: 20px;
+        }
+
+        .chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 300px;
+            gap: 10px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #00b894, #00cec9);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            min-height: 20px;
+        }
+
+        .chart-bar:hover {
+            filter: brightness(1.2);
+            transform: scaleY(1.05);
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: bold;
+        }
+
+        .chart-label {
+            text-align: center;
+            color: white;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Chatbot */
+        .chatbot-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-bubble {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user .chat-bubble {
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+        }
+
+        .chat-message.bot .chat-bubble {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .chat-send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .chat-send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-tabs {
+                justify-content: center;
+            }
+
+            .nav-tab {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+            }
+
+            .streak-number {
+                font-size: 3rem;
+            }
+
+            .badge-icon {
+                font-size: 4rem;
+            }
+
+            .chart {
+                height: 200px;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-brand">🌱 Green Habit Tracker PRO</div>
+        <div class="navbar-user">
+            <span class="username">Welcome, <span id="currentUsername"></span>!</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Quote Section -->
+        <div class="quote-section">
+            <div id="quoteLoading" class="loading"></div>
+            <div id="quoteContent" style="display: none;">
+                <div class="quote-text" id="quoteText"></div>
+                <div class="quote-author" id="quoteAuthor"></div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('dashboard')">🏠 Dashboard</button>
+            <button class="nav-tab" onclick="showTab('leaderboard')">🏆 Leaderboard</button>
+            <button class="nav-tab" onclick="showTab('analytics')">📊 Analytics</button>
+            <button class="nav-tab" onclick="showTab('chatbot')">💬 Eco Chatbot</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="card">
+                <h2>🎯 Current Streak</h2>
+                <div class="streak-display">
+                    <div class="streak-number" id="streakNumber">0</div>
+                    <div class="streak-label">Days in a row! 🔥</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>✅ Today's Eco Habits</h2>
+                <div class="habits-list" id="habitsList">
+                    <div class="habit-item">
+                        <input type="checkbox" id="habit1" value="Saved Water">
+                        <label class="habit-label" for="habit1">💧 Saved Water</label>
+                    </div>
+                    <div class="habit-item">
+                        <input type="checkbox" id="habit2" value="Turned OFF Lights">
+                        <label class="habit-label" for="habit2">💡 Turned OFF Lights</label>
+                    </div>
+                    <div class="habit-item">
+                        <input type="checkbox" id="habit3" value="Avoided Plastic">
+                        <label class="habit-label" for="habit3">🚫 Avoided Plastic</label>
+                    </div>
+                    <div class="habit-item">
+                        <input type="checkbox" id="habit4" value="Recycled Waste">
+                        <label class="habit-label" for="habit4">♻️ Recycled Waste</label>
+                    </div>
+                    <div class="habit-item">
+                        <input type="checkbox" id="habit5" value="Used Public Transport">
+                        <label class="habit-label" for="habit5">🚌 Used Public Transport / Bicycle</label>
+                    </div>
+                </div>
+
+                <button class="btn" id="completeBtn" onclick="markAsCompleted()">✓ Mark as Completed</button>
+            </div>
+
+            <div class="card">
+                <h2>🏅 Your Current Badge</h2>
+                <div class="badge-display" id="badgeDisplay">
+                    <div class="badge-icon" id="badgeIcon">🥉</div>
+                    <div class="badge-name" id="badgeName">Eco Beginner</div>
+                    <div class="badge-description" id="badgeDescription">Complete 5 days to unlock the next badge!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Tab -->
+        <div id="leaderboard" class="tab-content">
+            <div class="card">
+                <h2>🏆 Top Eco Warriors</h2>
+                <div class="leaderboard-list" id="leaderboardList"></div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="card">
+                <h2>📊 Weekly Analytics</h2>
+                <div class="chart-container">
+                    <div class="chart" id="weeklyChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot Tab -->
+        <div id="chatbot" class="tab-content">
+            <div class="card">
+                <h2>💬 Eco Chatbot Assistant</h2>
+                <div class="chatbot-container">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask me anything about eco habits...">
+                        <button class="chat-send-btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        // Display username
+        document.getElementById('currentUsername').textContent = currentUser;
+
+        // Get user data
+        function getUserData() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            return users.find(u => u.username === currentUser);
+        }
+
+        // Save user data
+        function saveUserData(userData) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const index = users.findIndex(u => u.username === currentUser);
+            if (index !== -1) {
+                users[index] = userData;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const navTabs = document.querySelectorAll('.nav-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            navTabs.forEach(nav => nav.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'leaderboard') {
+                loadLeaderboard();
+            } else if (tabName === 'analytics') {
+                loadAnalytics();
+            } else if (tabName === 'chatbot') {
+                loadChatHistory();
+            }
+        }
+
+        // Load motivational quote
+        async function loadQuote() {
+            try {
+                const response = await fetch('https://zenquotes.io/api/random');
+                const data = await response.json();
+                
+                document.getElementById('quoteText').textContent = `"${data[0].q}"`;
+                document.getElementById('quoteAuthor').textContent = `- ${data[0].a}`;
+                document.getElementById('quoteLoading').style.display = 'none';
+                document.getElementById('quoteContent').style.display = 'block';
+            } catch (error) {
+                document.getElementById('quoteText').textContent = '"The Earth is what we all have in common."';
+                document.getElementById('quoteAuthor').textContent = '- Wendell Berry';
+                document.getElementById('quoteLoading').style.display = 'none';
+                document.getElementById('quoteContent').style.display = 'block';
+            }
+        }
+
+        // Initialize dashboard
+        function initDashboard() {
+            const userData = getUserData();
+            
+            // Update streak display
+            document.getElementById('streakNumber').textContent = userData.streak || 0;
+            
+            // Update progress bar
+            const progress = Math.min((userData.streak / 20) * 100, 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+            
+            // Update badge
+            updateBadge(userData.streak || 0);
+            
+            // Check if already completed today
+            checkTodayCompletion();
+        }
+
+        // Check if habits completed today
+        function checkTodayCompletion() {
+            const userData = getUserData();
+            const today = new Date().toDateString();
+            
+            if (userData.lastCompletedDate === today) {
+                document.getElementById('completeBtn').disabled = true;
+                document.getElementById('completeBtn').textContent = '✓ Completed Today!';
+                
+                // Check all checkboxes
+                const checkboxes = document.querySelectorAll('#habitsList input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.checked = true;
+                    cb.disabled = true;
+                    cb.parentElement.classList.add('completed');
+                });
+            }
+        }
+
+        // Mark habits as completed
+        function markAsCompleted() {
+            const checkboxes = document.querySelectorAll('#habitsList input[type="checkbox"]');
+            const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            
+            if (checkedCount === 0) {
+                alert('Please check at least one habit!');
+                return;
+            }
+            
+            const userData = getUserData();
+            const today = new Date().toDateString();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toDateString();
+            
+            // Check streak logic
+            if (userData.lastCompletedDate === yesterdayStr) {
+                // Continue streak
+                userData.streak = (userData.streak || 0) + 1;
+            } else if (userData.lastCompletedDate !== today) {
+                // Reset streak if missed a day
+                userData.streak = 1;
+            }
+            
+            userData.lastCompletedDate = today;
+            
+            // Save weekly data for analytics
+            const dayOfWeek = new Date().toLocaleDateString('en-US', { weekday: 'short' });
+            if (!userData.weeklyData) userData.weeklyData = {};
+            userData.weeklyData[dayOfWeek] = checkedCount;
+            
+            // Check for badge unlock
+            const oldStreak = userData.streak - 1;
+            const newBadge = getBadgeInfo(userData.streak);
+            const oldBadge = getBadgeInfo(oldStreak);
+            
+            if (newBadge.name !== oldBadge.name) {
+                setTimeout(() => {
+                    showBadgeUnlock(newBadge);
+                }, 500);
+            }
+            
+            saveUserData(userData);
+            initDashboard();
+        }
+
+        // Get badge info based on streak
+        function getBadgeInfo(streak) {
+            if (streak >= 20) {
+                return { icon: '🏆', name: 'Eco Legend', description: 'You are an inspiration to everyone!' };
+            } else if (streak >= 10) {
+                return { icon: '🥇', name: 'Earth Saver', description: 'Amazing commitment! Keep going!' };
+            } else if (streak >= 5) {
+                return { icon: '🥈', name: 'Green Warrior', description: 'Great progress! 10 days for next badge!' };
+            } else {
+                return { icon: '🥉', name: 'Eco Beginner', description: `Complete ${5 - streak} more days to unlock next badge!` };
+            }
+        }
+
+        // Update badge display
+        function updateBadge(streak) {
+            const badge = getBadgeInfo(streak);
+            document.getElementById('badgeIcon').textContent = badge.icon;
+            document.getElementById('badgeName').textContent = badge.name;
+            document.getElementById('badgeDescription').textContent = badge.description;
+        }
+
+        // Show badge unlock animation
+        function showBadgeUnlock(badge) {
+            const badgeIcon = document.getElementById('badgeIcon');
+            badgeIcon.classList.add('unlock');
+            badgeIcon.parentElement.classList.add('badge-glow');
+            
+            setTimeout(() => {
+                badgeIcon.classList.remove('unlock');
+                badgeIcon.parentElement.classList.remove('badge-glow');
+            }, 1000);
+            
+            alert(`🎉 Congratulations! You unlocked: ${badge.name} ${badge.icon}`);
+        }
+
+        // Load leaderboard
+        function loadLeaderboard() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const sortedUsers = users.sort((a, b) => (b.streak || 0) - (a.streak || 0)).slice(0, 5);
+            
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+            
+            sortedUsers.forEach((user, index) => {
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                
+                if (index === 0) item.classList.add('top1');
+                else if (index === 1) item.classList.add('top2');
+                else if (index === 2) item.classList.add('top3');
+                
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
+                
+                item.innerHTML = `
+                    <div class="leaderboard-rank">${medal}</div>
+                    <div class="leaderboard-username">${user.username}${user.username === currentUser ? ' (You)' : ''}</div>
+                    <div class="leaderboard-streak">${user.streak || 0} 🔥</div>
+                `;
+                
+                leaderboardList.appendChild(item);
+            });
+        }
+
+        // Load analytics
+        function loadAnalytics() {
+            const userData = getUserData();
+            const weeklyData = userData.weeklyData || {};
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            const chart = document.getElementById('weeklyChart');
+            chart.innerHTML = '';
+            
+            days.forEach(day => {
+                const value = weeklyData[day] || 0;
+                const barContainer = document.createElement('div');
+                barContainer.style.flex = '1';
+                barContainer.style.display = 'flex';
+                barContainer.style.flexDirection = 'column';
+                barContainer.style.alignItems = 'center';
+                
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = (value * 20) + '%';
